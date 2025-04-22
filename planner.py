@@ -87,6 +87,10 @@ def initialize_world(world: str) -> list:
 
 # Main function to execute the vacuum robot planner
 def main(algo: str, world: str):
+    if algo not in ["depth-first", "uniform-cost"]:
+        print("Invalid algorithm. Please use 'depth-first' or 'uniform-cost'.")
+        return
+    
     vacuum_world = initialize_world(world)
     cols = int(vacuum_world[0])
     rows = int(vacuum_world[1])
@@ -109,9 +113,6 @@ def main(algo: str, world: str):
     elif algo == "uniform-cost":
         # uniform-cost search algorithm
         search = uniform_cost_search(vacuum_world, r_pos, dirty_cells)
-    else:
-        print("Invalid algorithm. Please use 'depth-first' or 'uniform-cost'.")
-        return
     
     path = search[0] # path to the solution
     generated = search[1] # number of nodes generated
@@ -120,7 +121,6 @@ def main(algo: str, world: str):
         print("No solution found.")
         return
 
-    print(vacuum_world)
     for move in path:
         print(move)
     print(f"{generated} nodes generated")
@@ -128,6 +128,9 @@ def main(algo: str, world: str):
 
 
 if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Usage: python3 planner.py [ algorithm ] [ world-file ]")
+        sys.exit(1)
     algorithm = sys.argv[1]
     world = sys.argv[2]
     main(algorithm, world)
